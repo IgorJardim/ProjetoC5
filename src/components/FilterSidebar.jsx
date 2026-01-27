@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight, Check, HeartHandshake } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { categories } from '@/data/coloringData';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/data/translations';
 
 const FilterSection = ({ title, isOpen, onToggle, children }) => {
   return (
@@ -34,12 +36,14 @@ const FilterSection = ({ title, isOpen, onToggle, children }) => {
 };
 
 const FilterSidebar = ({ filters, onFilterChange }) => {
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  
   const [openSections, setOpenSections] = useState({
     categories: true,
     difficulty: true,
     age: true
   });
-  const { toast } = useToast();
 
   const toggleSection = (section) => {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
@@ -56,20 +60,33 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
     onFilterChange(type, newValues);
   };
 
-  const handleSupportClick = () => {
-    toast({
-      title: "Obrigado pelo interesse!",
-      description: "🚧 O sistema de doações será implementado em breve! 🚀"
-    });
+  // Traduzir dificuldades
+  const difficulties = {
+    pt: ['Fácil', 'Médio', 'Difícil'],
+    en: ['Easy', 'Medium', 'Hard'],
+    es: ['Fácil', 'Medio', 'Difícil']
   };
+
+  const difficultyMapping = {
+    'Fácil': { en: 'Easy', es: 'Fácil' },
+    'Easy': { pt: 'Fácil', es: 'Fácil' },
+    'Médio': { en: 'Medium', es: 'Medio' },
+    'Medium': { pt: 'Médio', es: 'Medio' },
+    'Difícil': { en: 'Hard', es: 'Difícil' },
+    'Hard': { pt: 'Difícil', es: 'Difícil' }
+  };
+
+  const currentDifficulties = difficulties[language] || difficulties.pt;
 
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-      <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">Filtros</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+        {t('filters')}
+      </h3>
 
       {/* Categories */}
       <FilterSection
-        title="Categorias"
+        title={t('categories')}
         isOpen={openSections.categories}
         onToggle={() => toggleSection('categories')}
       >
@@ -85,7 +102,6 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
               <span className="text-sm font-medium text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('categories', cat.name)}>{cat.name}</span>
             </div>
             
-            {/* Subcategories (only show if parent is selected or partially logic if needed, but for simplicity showing all indented) */}
             <div className="ml-6 space-y-1.5 border-l-2 border-gray-100 pl-3">
               {cat.subcategories.map(sub => (
                 <div key={sub} className="flex items-center gap-2">
@@ -105,11 +121,11 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
 
       {/* Difficulty */}
       <FilterSection
-        title="Dificuldade"
+        title={t('difficulty')}
         isOpen={openSections.difficulty}
         onToggle={() => toggleSection('difficulty')}
       >
-        {['Fácil', 'Médio', 'Difícil'].map(level => (
+        {currentDifficulties.map(level => (
           <div key={level} className="flex items-center gap-2">
             <div 
               className={`w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-colors ${filters.difficulty.includes(level) ? 'bg-purple-600 border-purple-600' : 'border-gray-300 bg-white hover:border-purple-400'}`}
@@ -124,7 +140,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
 
       {/* Age Group */}
       <FilterSection
-        title="Idade Recomendada"
+        title={t('recommendedAge')}
         isOpen={openSections.age}
         onToggle={() => toggleSection('age')}
       >
@@ -136,20 +152,23 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
             >
               {filters.ageGroup.includes(age) && <Check className="w-3 h-3 text-white" />}
             </div>
-            <span className="text-sm text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('ageGroup', age)}>{age} anos</span>
+            <span className="text-sm text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('ageGroup', age)}>
+              {age} {t('years')}
+            </span>
           </div>
         ))}
       </FilterSection>
 
       {/* Donate Button */}
       <div className="mt-8 pt-4 border-t border-gray-100">
-        <Button 
-          onClick={handleSupportClick}
-          className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold shadow-md hover:shadow-lg transition-all"
-        >
-          <HeartHandshake className="w-4 h-4 mr-2" />
-          Apoie o projeto $$
-        </Button>
+        <Link to="/apoie">
+          <Button 
+            className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold shadow-md hover:shadow-lg transition-all"
+          >
+            <HeartHandshake className="w-4 h-4 mr-2" />
+            {language === 'en' ? 'Support the project $$' : language === 'es' ? 'Apoya el proyecto $$' : 'Apoie o projeto $$'}
+          </Button>
+        </Link>
       </div>
     </div>
   );
