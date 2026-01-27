@@ -194,7 +194,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <BuildYourBook />
+      {/* <BuildYourBook /> */}
         <AdSensePlaceholder size="728x90" className="my-16" />
       </main>
       <Footer />

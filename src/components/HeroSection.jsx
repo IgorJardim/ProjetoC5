@@ -1,17 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/data/translations';
 
 const HeroSection = () => {
-  const { toast } = useToast();
-
-  const handleCTAClick = () => {
-    toast({
-      title: "🚧 Este recurso ainda não está implementado — mas não se preocupe! Você pode solicitá-lo no seu próximo prompt! 🚀"
-    });
-  };
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
 
   return (
     <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
@@ -89,9 +86,9 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight"
           >
-            Encontre seu <span className="text-yellow-300">"Colorir"</span>
+            {t('heroTitle')} <span className="text-yellow-300">{t('heroColoring')}</span>
             <br />
-            e Aproveite
+            {t('heroSubtitle')}
           </motion.h1>
 
           <motion.p
@@ -100,7 +97,7 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto"
           >
-            Descubra milhares de páginas para colorir e crie seu livro perfeito em FreeColoringBookids.
+            {t('heroDescription')}
           </motion.p>
 
           <motion.div
@@ -109,21 +106,15 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.7 }}
             className="flex flex-col sm:flex-row gap-4 justify-center"
           >
-            <Button
-              size="lg"
-              onClick={handleCTAClick}
-              className="bg-white text-purple-600 hover:bg-gray-100 text-lg px-8 py-6 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              Começar a Colorir Agora
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={handleCTAClick}
-              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-600 text-lg px-8 py-6 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              Explorar Galeria
-            </Button>
+            <Link to="/categorias">
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-600 text-lg px-8 py-6 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
+              >
+                {t('exploreGallery')}
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>
