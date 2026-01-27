@@ -1,0 +1,26 @@
+# Dependências do Node (O mais importante!)
+node_modules/
+dist/
+build/
+
+# Arquivos de sistema e IDEs
+.DS_Store
+.vscode/
+.idea/
+
+# Backend / PHP / Composer
+vendor/
+
+# Arquivos de ambiente (NUNCA suba senhas pro GitHub)
+.env
+.env.local
+
+# Uploads (Geralmente não subimos as imagens dos usuários, apenas a pasta vazia)
+api-colorir/uploads/*
+!api-colorir/uploads/.gitkeep
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+php_errors.log
