@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Download, Heart, Share2, Printer, Calendar, Tag, Star, Eye, User} from 'lucide-react';
+import { ArrowLeft, Download, Heart, Share2, Printer, Calendar, Star } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { useDrawings } from '@/contexts/DrawingsContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation, useCategoryTranslation, useDifficultyTranslation } from '@/data/translations';
 
 const API_URL = 'http://localhost/api-colorir/drawings';
 
@@ -14,6 +16,11 @@ const DrawingDetailPage = () => {
   const { id } = useParams();
   const { getDrawingById } = useDrawings();
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { translateCategory } = useCategoryTranslation(language);
+  const { translateDifficulty } = useDifficultyTranslation(language);
+  
   const [drawing, setDrawing] = useState(null);
   const [likes, setLikes] = useState(0);
   const [hasLiked, setHasLiked] = useState(false);
@@ -61,16 +68,16 @@ const DrawingDetailPage = () => {
           localStorage.setItem('user_likes', JSON.stringify(updatedUserLikes));
           
           toast({
-            title: "Like removido",
-            description: "Você removeu seu like deste desenho"
+            title: t('likeRemoved'),
+            description: t('likeRemovedDesc')
           });
         } else {
           userLikes.push(drawingId);
           localStorage.setItem('user_likes', JSON.stringify(userLikes));
           
           toast({
-            title: "❤️ Curtiu!",
-            description: "Você curtiu este desenho"
+            title: `❤️ ${t('likeAdded')}`,
+            description: t('likeAddedDesc')
           });
         }
       } else {
@@ -79,8 +86,8 @@ const DrawingDetailPage = () => {
     } catch (error) {
       console.error('Erro ao dar like:', error);
       toast({
-        title: "❌ Erro",
-        description: "Não foi possível curtir. Tente novamente."
+        title: `❌ ${t('error')}`,
+        description: t('errorLike')
       });
     }
   };
@@ -113,14 +120,14 @@ const DrawingDetailPage = () => {
       window.URL.revokeObjectURL(url);
 
       toast({
-        title: "✅ Download iniciado!",
-        description: "Seu desenho está sendo baixado"
+        title: `✅ ${t('downloadStarted')}`,
+        description: t('downloadStartedDesc')
       });
     } catch (error) {
       console.error('Erro no download:', error);
       toast({
-        title: "❌ Erro no download",
-        description: "Não foi possível baixar o desenho"
+        title: `❌ ${t('error')}`,
+        description: t('errorDownload')
       });
     } finally {
       setIsDownloading(false);
@@ -246,10 +253,10 @@ const DrawingDetailPage = () => {
                 />
               </div>
               <div class="watermark">
-                © FreeColoringBookIds.com - Desenho para Colorir Gratuito
+                © FreeColoringBookIds.com - ${t('freeColoringDrawing')}
               </div>
               <div class="info">
-                ${drawing.category} • ${drawing.subcategory} • ${drawing.difficulty} • ${drawing.ageGroup} anos
+                ${translateCategory(drawing.category)} • ${translateCategory(drawing.subcategory)} • ${translateDifficulty(drawing.difficulty)} • ${drawing.ageGroup} ${t('years')}
               </div>
             </div>
           </body>
@@ -258,15 +265,15 @@ const DrawingDetailPage = () => {
       printWindow.document.close();
 
       toast({
-        title: "🖨️ Preparando impressão",
-        description: "Janela de impressão será aberta em instantes"
+        title: `🖨️ ${t('printPreparing')}`,
+        description: t('printPreparingDesc')
       });
 
     } catch (error) {
       console.error('Erro ao imprimir:', error);
       toast({
-        title: "❌ Erro na impressão",
-        description: "Não foi possível preparar a impressão"
+        title: `❌ ${t('error')}`,
+        description: t('errorPrint')
       });
     }
   };
@@ -274,7 +281,7 @@ const DrawingDetailPage = () => {
   const handleShare = async () => {
     const shareData = {
       title: drawing.title,
-      text: `Confira este desenho para colorir: ${drawing.title}`,
+      text: `${drawing.title}`,
       url: window.location.href
     };
 
@@ -282,8 +289,8 @@ const DrawingDetailPage = () => {
       try {
         await navigator.share(shareData);
         toast({
-          title: "✅ Compartilhado!",
-          description: "Link compartilhado com sucesso"
+          title: `✅ ${t('shared')}`,
+          description: t('sharedDesc')
         });
       } catch (err) {
         console.log('Erro ao compartilhar:', err);
@@ -291,8 +298,8 @@ const DrawingDetailPage = () => {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "📋 Link copiado!",
-        description: "Link copiado para a área de transferência"
+        title: `📋 ${t('linkCopied')}`,
+        description: t('linkCopiedDesc')
       });
     }
   };
@@ -302,9 +309,9 @@ const DrawingDetailPage = () => {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="container mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Desenho não encontrado</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">{t('drawingNotFound')}</h1>
           <Link to="/categorias" className="text-purple-600 hover:text-pink-600">
-            Voltar para categorias
+            {t('backToCategories')}
           </Link>
         </div>
         <Footer />
@@ -315,6 +322,12 @@ const DrawingDetailPage = () => {
   const difficultyColor = {
     'Fácil': 'bg-green-100 text-green-700 border-green-300',
     'Médio': 'bg-yellow-100 text-yellow-700 border-yellow-300',
+    'Difícil': 'bg-red-100 text-red-700 border-red-300',
+    'Easy': 'bg-green-100 text-green-700 border-green-300',
+    'Medium': 'bg-yellow-100 text-yellow-700 border-yellow-300',
+    'Hard': 'bg-red-100 text-red-700 border-red-300',
+    'Fácil': 'bg-green-100 text-green-700 border-green-300',
+    'Medio': 'bg-yellow-100 text-yellow-700 border-yellow-300',
     'Difícil': 'bg-red-100 text-red-700 border-red-300'
   };
 
@@ -324,8 +337,8 @@ const DrawingDetailPage = () => {
       
       <main className="container mx-auto px-4 py-8">
         <Breadcrumb items={[
-          { label: 'Categorias', href: '/categorias' },
-          { label: drawing.category, href: `/categorias?category=${drawing.category}` },
+          { label: t('categories'), href: '/categorias' },
+          { label: translateCategory(drawing.category), href: `/categorias?category=${drawing.category}` },
           { label: drawing.title, href: null }
         ]} />
 
@@ -335,7 +348,7 @@ const DrawingDetailPage = () => {
             className="inline-flex items-center gap-2 text-gray-600 hover:text-purple-600 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Voltar para categorias
+            {t('backToCategories')}
           </Link>
 
           <div className="grid lg:grid-cols-2 gap-8">
@@ -366,7 +379,7 @@ const DrawingDetailPage = () => {
                   className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4 rounded-xl hover:shadow-lg transition-all font-semibold disabled:opacity-50"
                 >
                   <Download className="w-5 h-5" />
-                  {isDownloading ? 'Baixando...' : 'Baixar'}
+                  {isDownloading ? t('downloading') : t('download')}
                 </button>
 
                 <button
@@ -374,7 +387,7 @@ const DrawingDetailPage = () => {
                   className="flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-4 rounded-xl hover:shadow-lg transition-all font-semibold"
                 >
                   <Printer className="w-5 h-5" />
-                  Imprimir
+                  {t('print')}
                 </button>
               </div>
             </motion.div>
@@ -394,21 +407,21 @@ const DrawingDetailPage = () => {
 
                 <div className="flex flex-wrap gap-2 mb-4">
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-purple-100 text-purple-700 border border-purple-200">
-                    {drawing.category}
+                    {translateCategory(drawing.category)}
                   </span>
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-pink-100 text-pink-700 border border-pink-200">
-                    {drawing.subcategory}
+                    {translateCategory(drawing.subcategory)}
                   </span>
                   <span className={`px-4 py-2 rounded-full text-sm font-semibold border ${difficultyColor[drawing.difficulty]}`}>
-                    {drawing.difficulty}
+                    {translateDifficulty(drawing.difficulty)}
                   </span>
                   <span className="px-4 py-2 rounded-full text-sm font-semibold bg-orange-100 text-orange-700 border border-orange-200">
-                    {drawing.ageGroup} anos
+                    {drawing.ageGroup} {t('years')}
                   </span>
                 </div>
 
                 <div className="border-t border-gray-200 pt-4">
-                  <h3 className="font-semibold text-gray-700 mb-2">Descrição:</h3>
+                  <h3 className="font-semibold text-gray-700 mb-2">{t('description')}</h3>
                   <p className="text-gray-600 leading-relaxed">
                     {drawing.description}
                   </p>
@@ -416,13 +429,13 @@ const DrawingDetailPage = () => {
               </div>
 
               <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <h3 className="font-semibold text-gray-700 mb-4">Estatísticas</h3>
+                <h3 className="font-semibold text-gray-700 mb-4">{t('statistics')}</h3>
                 
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-2 text-gray-600">
                       <Printer className="w-5 h-5" />
-                      <span className="font-medium">Impressos</span>
+                      <span className="font-medium">{t('printed')}</span>
                     </div>
                     <span className="font-bold text-gray-800">{drawing.downloads?.toLocaleString() || 0}</span>
                   </div>
@@ -430,7 +443,7 @@ const DrawingDetailPage = () => {
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-2 text-gray-600">
                       <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                      <span className="font-medium">Avaliação</span>
+                      <span className="font-medium">{t('rating')}</span>
                     </div>
                     <span className="font-bold text-gray-800">{drawing.rating || 5.0}</span>
                   </div>
@@ -438,10 +451,12 @@ const DrawingDetailPage = () => {
                   <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                     <div className="flex items-center gap-2 text-gray-600">
                       <Calendar className="w-5 h-5" />
-                      <span className="font-medium">Adicionado em</span>
+                      <span className="font-medium">{t('addedOn')}</span>
                     </div>
                     <span className="font-bold text-gray-800">
-                      {new Date(drawing.dateAdded).toLocaleDateString('pt-BR')}
+                      {new Date(drawing.dateAdded).toLocaleDateString(
+                        language === 'pt' ? 'pt-BR' : language === 'es' ? 'es-ES' : 'en-US'
+                      )}
                     </span>
                   </div>
                 </div>
@@ -455,7 +470,7 @@ const DrawingDetailPage = () => {
                   }`}
                 >
                   <Heart className={`w-6 h-6 ${hasLiked ? 'fill-white' : ''}`} />
-                  <span>{hasLiked ? 'Curtido' : 'Curtir'}</span>
+                  <span>{hasLiked ? t('liked') : t('like')}</span>
                   <span className="ml-auto bg-white/20 px-3 py-1 rounded-full text-sm">
                     {likes}
                   </span>
@@ -466,28 +481,28 @@ const DrawingDetailPage = () => {
                   className="w-full mt-3 flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all font-semibold"
                 >
                   <Share2 className="w-5 h-5" />
-                  Compartilhar
+                  {t('share')}
                 </button>
               </div>
 
               <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-6 text-white">
-                <h3 className="font-bold text-xl mb-3">💡 Dicas para Colorir</h3>
+                <h3 className="font-bold text-xl mb-3">💡 {t('coloringTips')}</h3>
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-300">•</span>
-                    <span>Use lápis de cor ou canetinhas para melhores resultados</span>
+                    <span>{t('tip1')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-300">•</span>
-                    <span>Imprima em papel de gramatura 120g ou superior</span>
+                    <span>{t('tip2')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-300">•</span>
-                    <span>Comece pelas áreas maiores e depois pinte os detalhes</span>
+                    <span>{t('tip3')}</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-yellow-300">•</span>
-                    <span>Não há regras! Use sua criatividade!</span>
+                    <span>{t('tip4')}</span>
                   </li>
                 </ul>
               </div>

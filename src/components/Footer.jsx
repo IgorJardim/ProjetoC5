@@ -2,31 +2,34 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation } from '@/data/translations';
 
 const Footer = () => {
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
 
   const handleLinkClick = section => {
     toast({
-      title: `Seção ${section}`,
-      description: "🚧 Este recurso ainda não está implementado — mas não se preocupe! Você pode solicitá-lo no seu próximo prompt! 🚀"
+      title: `${t('section')} ${section}`,
+      description: `🚧 ${t('featureNotImplemented')} 🚀`
     });
   };
 
   const handleNewsletterSubmit = e => {
     e.preventDefault();
     toast({
-      title: "Inscrição na newsletter",
-      description: "🚧 Este recurso ainda não está implementado — mas não se preocupe! Você pode solicitá-lo no seu próximo prompt! 🚀"
+      title: t('newsletterSignup'),
+      description: `🚧 ${t('featureNotImplemented')} 🚀`
     });
   };
 
   const footerLinks = {
-    'Empresa': ['Sobre Nós', 'Nossa História', 'Carreiras', 'Kit de Imprensa'],
-    'Suporte': ['Fale Conosco', 'FAQ', 'Envio', 'Devoluções'],
-    'Legal': ['Política de Privacidade', 'Termos de Uso', 'Política de Cookies', 'Aviso Legal']
+    [t('company')]: [t('aboutUs'), t('ourStory')],
+    [t('support')]: [t('contact')],
+    [t('legal')]: [t('privacyPolicy'), t('termsOfUse'), t('cookiePolicy'), t('legalNotice')]
   };
 
   const socialLinks = [
@@ -52,7 +55,7 @@ const Footer = () => {
               <span className="text-xl font-bold">FreeColoringBookids</span>
             </div>
             <p className="text-gray-300 mb-6">
-              Seu destino definitivo para experiências criativas de colorir. Descubra, crie e aproveite belas obras de arte em{' '}
+              {t('destinationText')}{' '}
               <a href="https://freecoloringbookids.com" className="text-purple-300 hover:text-purple-100 underline">
                 freecoloringbookids.com
               </a>.
@@ -94,32 +97,6 @@ const Footer = () => {
               </ul>
             </motion.div>
           ))}
-
-          {/* Newsletter Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            viewport={{ once: true }} 
-            transition={{ delay: 0.4 }}
-          >
-            <span className="text-lg font-semibold mb-4 block">Newsletter</span>
-            <p className="text-gray-300 mb-4 text-sm">
-              Inscreva-se para receber ofertas especiais e novidades
-            </p>
-            <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-              <input 
-                type="email" 
-                placeholder="Seu e-mail" 
-                className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500" 
-              />
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg"
-              >
-                Inscrever-se
-              </Button>
-            </form>
-          </motion.div>
         </div>
 
         {/* Contact Info */}
@@ -135,7 +112,7 @@ const Footer = () => {
                 <Mail className="w-5 h-5 text-purple-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-400">E-mail</p>
+                <p className="text-sm text-gray-400">{t('email')}</p>
                 <p className="text-white">contact@freecoloringbookids.com</p>
               </div>
             </div>
@@ -144,7 +121,7 @@ const Footer = () => {
                 <Phone className="w-5 h-5 text-pink-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-400">Telefone</p>
+                <p className="text-sm text-gray-400">{t('phone')}</p>
                 <p className="text-white">+1 (555) 123-4567</p>
               </div>
             </div>
@@ -153,7 +130,7 @@ const Footer = () => {
                 <MapPin className="w-5 h-5 text-orange-400" />
               </div>
               <div>
-                <p className="text-sm text-gray-400">Localização</p>
+                <p className="text-sm text-gray-400">{t('location')}</p>
                 <p className="text-white">Rio de Janeiro, Brasil</p>
               </div>
             </div>
@@ -168,7 +145,7 @@ const Footer = () => {
           className="border-t border-white/10 pt-8 text-center"
         >
           <p className="text-gray-400 text-sm mb-3">
-            © 2026 FreeColoringBookids. All rights reserved.
+            © 2026 FreeColoringBookids. {t('allRightsReserved')}
           </p>
           
           {/* Link Admin Discreto */}
@@ -177,7 +154,7 @@ const Footer = () => {
             className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-purple-400 transition-colors"
           >
             <Shield className="w-3 h-3" />
-            <span>Admin</span>
+            <span>{t('admin')}</span>
           </Link>
         </motion.div>
       </div>

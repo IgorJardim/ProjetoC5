@@ -33,6 +33,8 @@ export const translations = {
     download: 'Baixar',
     downloading: 'Baixando...',
     share: 'Compartilhar',
+    removeLike: 'Remover curtida',
+    quickPrint: 'Imprimir rapidamente',
     
     // Categories
     totalResults: 'Mostrando',
@@ -53,6 +55,7 @@ export const translations = {
     backToCategories: 'Voltar para categorias',
     description: 'Descrição:',
     statistics: 'Estatísticas',
+    printed: 'Impressos',
     impressions: 'Impressões',
     rating: 'Avaliação',
     addedOn: 'Adicionado em',
@@ -62,6 +65,8 @@ export const translations = {
     tip3: 'Comece pelas áreas maiores e depois pinte os detalhes',
     tip4: 'Não há regras! Use sua criatividade!',
     years: 'anos',
+    drawingNotFound: 'Desenho não encontrado',
+    freeColoringDrawing: 'Desenho para Colorir Gratuito',
     
     // Support Page
     supportTitle: 'Ajude a Manter os Desenhos',
@@ -134,12 +139,78 @@ export const translations = {
     downloadStartedDesc: 'Seu desenho está sendo baixado',
     printPreparing: 'Preparando impressão',
     printPreparingDesc: 'Janela de impressão será aberta em instantes',
+    printPreparingShort: 'Janela de impressão será aberta',
     shared: 'Compartilhado!',
     sharedDesc: 'Link compartilhado com sucesso',
     linkCopied: 'Link copiado!',
     linkCopiedDesc: 'Link copiado para a área de transferência',
     error: 'Erro',
     errorDesc: 'Algo deu errado. Tente novamente.',
+    errorLike: 'Não foi possível curtir. Tente novamente.',
+    errorLikeOpen: 'Não foi possível curtir. Abra o desenho para curtir.',
+    errorDownload: 'Não foi possível baixar o desenho',
+    errorPrint: 'Não foi possível preparar a impressão',
+    errorPrintShort: 'Não foi possível imprimir',
+    
+    // ColoringGrid
+    showing: 'Mostrando',
+    noDrawingsFound: 'Nenhum desenho encontrado com estes filtros.',
+    clearAllFilters: 'Limpar todos os filtros',
+    
+    // NewsPage
+    latestNews: 'Últimas Notícias',
+    stayInformed: 'Fique por Dentro',
+    newsSubtitle: 'Novidades, atualizações e dicas sobre o mundo da coloração',
+    searchNews: 'Buscar notícias...',
+    allCategories: 'Todas',
+    featured: 'Destaque',
+    readMore: 'Ler mais',
+    noNewsFound: 'Nenhuma notícia encontrada.',
+    
+    // NewsDetailPage
+    newsNotFound: 'Notícia não encontrada',
+    backToNews: 'Voltar para notícias',
+    likedThisNews: 'Gostou desta notícia?',
+    shareWithFriends: 'Compartilhe com seus amigos!',
+    newsLinkCopied: 'Link copiado!',
+    newsLinkCopiedDesc: 'O link da notícia foi copiado para a área de transferência.',
+    
+    // FilterSidebar & Breadcrumb
+    supportProject: 'Apoie o projeto $$',
+    
+    // Categories & Subcategories
+    categoryEntretenimento: 'Entretenimento',
+    categoryNatureza: 'Natureza',
+    categoryEducativo: 'Educativo',
+    categoryTerapeutico: 'Terapêutico',
+    subDesenhos: 'Desenhos Animados',
+    subRoblox: 'Roblox',
+    subMinecraft: 'Minecraft',
+    subFilmes: 'Filmes',
+    subAnimais: 'Animais',
+    subFloresta: 'Floresta',
+    subMar: 'Mar',
+    subFrutas: 'Frutas',
+    subAlimentos: 'Alimentos',
+    subFiguras: 'Figuras Geométricas',
+    subObjetos: 'Objetos Básicos',
+    subVeiculos: 'Veículos',
+    subDatas: 'Datas Festivas',
+    subTDAH: 'TDAH',
+    subHiper: 'Hiperatividade',
+    subAutismo: 'Autismo',
+    subCalm: 'Calm Pictures',
+    categoryNovidades: 'Novidades',
+    
+    // Footer
+    company: 'Empresa',
+    support: 'Suporte',
+    legal: 'Legal',
+    destinationText: 'Seu destino definitivo para experiências criativas de colorir. Descubra, crie e aproveite belas obras de arte em',
+    featureNotImplemented: 'Este recurso ainda não está implementado — mas não se preocupe! Você pode solicitá-lo no seu próximo prompt!',
+    section: 'Seção',
+    newsletterSignup: 'Inscrição na newsletter',
+    admin: 'Admin',
     
     // Common
     loading: 'Carregando...',
@@ -185,6 +256,8 @@ export const translations = {
     download: 'Download',
     downloading: 'Downloading...',
     share: 'Share',
+    removeLike: 'Remove like',
+    quickPrint: 'Quick print',
     
     // Categories
     totalResults: 'Showing',
@@ -205,6 +278,7 @@ export const translations = {
     backToCategories: 'Back to categories',
     description: 'Description:',
     statistics: 'Statistics',
+    printed: 'Printed',
     impressions: 'Impressions',
     rating: 'Rating',
     addedOn: 'Added on',
@@ -214,6 +288,8 @@ export const translations = {
     tip3: 'Start with larger areas and then paint the details',
     tip4: 'There are no rules! Use your creativity!',
     years: 'years',
+    drawingNotFound: 'Drawing not found',
+    freeColoringDrawing: 'Free Coloring Drawing',
     
     // Support Page
     supportTitle: 'Help Keep the Drawings',
@@ -286,12 +362,78 @@ export const translations = {
     downloadStartedDesc: 'Your drawing is being downloaded',
     printPreparing: 'Preparing to print',
     printPreparingDesc: 'Print window will open shortly',
+    printPreparingShort: 'Print window will open',
     shared: 'Shared!',
     sharedDesc: 'Link shared successfully',
     linkCopied: 'Link copied!',
     linkCopiedDesc: 'Link copied to clipboard',
     error: 'Error',
     errorDesc: 'Something went wrong. Please try again.',
+    errorLike: 'Could not like. Please try again.',
+    errorLikeOpen: 'Could not like. Open the drawing to like it.',
+    errorDownload: 'Could not download the drawing',
+    errorPrint: 'Could not prepare the print',
+    errorPrintShort: 'Could not print',
+    
+    // ColoringGrid
+    showing: 'Showing',
+    noDrawingsFound: 'No drawings found with these filters.',
+    clearAllFilters: 'Clear all filters',
+    
+    // NewsPage
+    latestNews: 'Latest News',
+    stayInformed: 'Stay Informed',
+    newsSubtitle: 'News, updates and tips about the world of coloring',
+    searchNews: 'Search news...',
+    allCategories: 'All',
+    featured: 'Featured',
+    readMore: 'Read more',
+    noNewsFound: 'No news found.',
+    
+    // NewsDetailPage
+    newsNotFound: 'News not found',
+    backToNews: 'Back to news',
+    likedThisNews: 'Did you like this news?',
+    shareWithFriends: 'Share with your friends!',
+    newsLinkCopied: 'Link copied!',
+    newsLinkCopiedDesc: 'The news link was copied to clipboard.',
+    
+    // FilterSidebar & Breadcrumb
+    supportProject: 'Support the project $$',
+    
+    // Categories & Subcategories
+    categoryEntretenimento: 'Entertainment',
+    categoryNatureza: 'Nature',
+    categoryEducativo: 'Educational',
+    categoryTerapeutico: 'Therapeutic',
+    subDesenhos: 'Cartoons',
+    subRoblox: 'Roblox',
+    subMinecraft: 'Minecraft',
+    subFilmes: 'Movies',
+    subAnimais: 'Animals',
+    subFloresta: 'Forest',
+    subMar: 'Sea',
+    subFrutas: 'Fruits',
+    subAlimentos: 'Food',
+    subFiguras: 'Geometric Shapes',
+    subObjetos: 'Basic Objects',
+    subVeiculos: 'Vehicles',
+    subDatas: 'Holidays',
+    subTDAH: 'ADHD',
+    subHiper: 'Hyperactivity',
+    subAutismo: 'Autism',
+    subCalm: 'Calm Pictures',
+    categoryNovidades: 'News',
+    
+    // Footer
+    company: 'Company',
+    support: 'Support',
+    legal: 'Legal',
+    destinationText: 'Your ultimate destination for creative coloring experiences. Discover, create, and enjoy beautiful artwork at',
+    featureNotImplemented: 'This feature is not yet implemented — but don\'t worry! You can request it in your next prompt!',
+    section: 'Section',
+    newsletterSignup: 'Newsletter signup',
+    admin: 'Admin',
     
     // Common
     loading: 'Loading...',
@@ -337,6 +479,8 @@ export const translations = {
     download: 'Descargar',
     downloading: 'Descargando...',
     share: 'Compartir',
+    removeLike: 'Quitar me gusta',
+    quickPrint: 'Impresión rápida',
     
     // Categories
     totalResults: 'Mostrando',
@@ -357,6 +501,7 @@ export const translations = {
     backToCategories: 'Volver a categorías',
     description: 'Descripción:',
     statistics: 'Estadísticas',
+    printed: 'Impresos',
     impressions: 'Impresiones',
     rating: 'Calificación',
     addedOn: 'Añadido el',
@@ -366,6 +511,8 @@ export const translations = {
     tip3: 'Comienza por las áreas más grandes y luego pinta los detalles',
     tip4: '¡No hay reglas! ¡Usa tu creatividad!',
     years: 'años',
+    drawingNotFound: 'Dibujo no encontrado',
+    freeColoringDrawing: 'Dibujo para Colorear Gratis',
     
     // Support Page
     supportTitle: 'Ayuda a Mantener los Dibujos',
@@ -438,12 +585,78 @@ export const translations = {
     downloadStartedDesc: 'Tu dibujo se está descargando',
     printPreparing: 'Preparando impresión',
     printPreparingDesc: 'La ventana de impresión se abrirá en breve',
+    printPreparingShort: 'La ventana de impresión se abrirá',
     shared: '¡Compartido!',
     sharedDesc: 'Enlace compartido con éxito',
     linkCopied: '¡Enlace copiado!',
     linkCopiedDesc: 'Enlace copiado al portapapeles',
     error: 'Error',
     errorDesc: 'Algo salió mal. Inténtalo de nuevo.',
+    errorLike: 'No se pudo dar me gusta. Inténtalo de nuevo.',
+    errorLikeOpen: 'No se pudo dar me gusta. Abre el dibujo para dar me gusta.',
+    errorDownload: 'No se pudo descargar el dibujo',
+    errorPrint: 'No se pudo preparar la impresión',
+    errorPrintShort: 'No se pudo imprimir',
+    
+    // ColoringGrid
+    showing: 'Mostrando',
+    noDrawingsFound: 'No se encontraron dibujos con estos filtros.',
+    clearAllFilters: 'Limpiar todos los filtros',
+    
+    // NewsPage
+    latestNews: 'Últimas Noticias',
+    stayInformed: 'Mantente Informado',
+    newsSubtitle: 'Novedades, actualizaciones y consejos sobre el mundo del coloreado',
+    searchNews: 'Buscar noticias...',
+    allCategories: 'Todas',
+    featured: 'Destacado',
+    readMore: 'Leer más',
+    noNewsFound: 'No se encontraron noticias.',
+    
+    // NewsDetailPage
+    newsNotFound: 'Noticia no encontrada',
+    backToNews: 'Volver a noticias',
+    likedThisNews: '¿Te gustó esta noticia?',
+    shareWithFriends: '¡Compártela con tus amigos!',
+    newsLinkCopied: '¡Enlace copiado!',
+    newsLinkCopiedDesc: 'El enlace de la noticia fue copiado al portapapeles.',
+    
+    // FilterSidebar & Breadcrumb
+    supportProject: 'Apoya el proyecto $$',
+    
+    // Categories & Subcategories
+    categoryEntretenimento: 'Entretenimiento',
+    categoryNatureza: 'Naturaleza',
+    categoryEducativo: 'Educativo',
+    categoryTerapeutico: 'Terapéutico',
+    subDesenhos: 'Dibujos Animados',
+    subRoblox: 'Roblox',
+    subMinecraft: 'Minecraft',
+    subFilmes: 'Películas',
+    subAnimais: 'Animales',
+    subFloresta: 'Bosque',
+    subMar: 'Mar',
+    subFrutas: 'Frutas',
+    subAlimentos: 'Alimentos',
+    subFiguras: 'Figuras Geométricas',
+    subObjetos: 'Objetos Básicos',
+    subVeiculos: 'Vehículos',
+    subDatas: 'Fechas Festivas',
+    subTDAH: 'TDAH',
+    subHiper: 'Hiperactividad',
+    subAutismo: 'Autismo',
+    subCalm: 'Imágenes Tranquilas',
+    categoryNovidades: 'Novedades',
+    
+    // Footer
+    company: 'Empresa',
+    support: 'Soporte',
+    legal: 'Legal',
+    destinationText: 'Tu destino definitivo para experiencias creativas de colorear. Descubre, crea y disfruta de hermosas obras de arte en',
+    featureNotImplemented: '¡Esta función aún no está implementada, pero no te preocupes! ¡Puedes solicitarla en tu próximo mensaje!',
+    section: 'Sección',
+    newsletterSignup: 'Inscripción al boletín',
+    admin: 'Admin',
     
     // Common
     loading: 'Cargando...',
@@ -462,4 +675,156 @@ export const useTranslation = (language) => {
   };
   
   return { t };
+};
+
+// Helper para traduzir categorias e subcategorias vindas do banco
+export const useCategoryTranslation = (language) => {
+  const categoryMap = {
+    // Categorias principais
+    'Entretenimento': {
+      pt: 'Entretenimento',
+      en: 'Entertainment',
+      es: 'Entretenimiento'
+    },
+    'Natureza': {
+      pt: 'Natureza',
+      en: 'Nature',
+      es: 'Naturaleza'
+    },
+    'Educativo': {
+      pt: 'Educativo',
+      en: 'Educational',
+      es: 'Educativo'
+    },
+    'Terapêutico': {
+      pt: 'Terapêutico',
+      en: 'Therapeutic',
+      es: 'Terapéutico'
+    },
+    // Subcategorias
+    'Desenhos Animados': {
+      pt: 'Desenhos Animados',
+      en: 'Cartoons',
+      es: 'Dibujos Animados'
+    },
+    'Roblox': {
+      pt: 'Roblox',
+      en: 'Roblox',
+      es: 'Roblox'
+    },
+    'Minecraft': {
+      pt: 'Minecraft',
+      en: 'Minecraft',
+      es: 'Minecraft'
+    },
+    'Filmes': {
+      pt: 'Filmes',
+      en: 'Movies',
+      es: 'Películas'
+    },
+    'Animais': {
+      pt: 'Animais',
+      en: 'Animals',
+      es: 'Animales'
+    },
+    'Floresta': {
+      pt: 'Floresta',
+      en: 'Forest',
+      es: 'Bosque'
+    },
+    'Mar': {
+      pt: 'Mar',
+      en: 'Sea',
+      es: 'Mar'
+    },
+    'Frutas': {
+      pt: 'Frutas',
+      en: 'Fruits',
+      es: 'Frutas'
+    },
+    'Alimentos': {
+      pt: 'Alimentos',
+      en: 'Food',
+      es: 'Alimentos'
+    },
+    'Figuras Geométricas': {
+      pt: 'Figuras Geométricas',
+      en: 'Geometric Shapes',
+      es: 'Figuras Geométricas'
+    },
+    'Objetos Básicos': {
+      pt: 'Objetos Básicos',
+      en: 'Basic Objects',
+      es: 'Objetos Básicos'
+    },
+    'Veículos': {
+      pt: 'Veículos',
+      en: 'Vehicles',
+      es: 'Vehículos'
+    },
+    'Datas Festivas': {
+      pt: 'Datas Festivas',
+      en: 'Holidays',
+      es: 'Fechas Festivas'
+    },
+    'TDAH': {
+      pt: 'TDAH',
+      en: 'ADHD',
+      es: 'TDAH'
+    },
+    'Hiperatividade': {
+      pt: 'Hiperatividade',
+      en: 'Hyperactivity',
+      es: 'Hiperactividad'
+    },
+    'Autismo': {
+      pt: 'Autismo',
+      en: 'Autism',
+      es: 'Autismo'
+    },
+    'Calm Pictures': {
+      pt: 'Calm Pictures',
+      en: 'Calm Pictures',
+      es: 'Imágenes Tranquilas'
+    },
+    // Categorias de notícias
+    'Novidades': {
+      pt: 'Novidades',
+      en: 'News',
+      es: 'Novedades'
+    }
+  };
+
+  const translateCategory = (categoryName) => {
+    return categoryMap[categoryName]?.[language] || categoryName;
+  };
+
+  return { translateCategory };
+};
+
+// Helper para traduzir dificuldade vinda do banco
+export const useDifficultyTranslation = (language) => {
+  const difficultyMap = {
+    'Fácil': {
+      pt: 'Fácil',
+      en: 'Easy',
+      es: 'Fácil'
+    },
+    'Médio': {
+      pt: 'Médio',
+      en: 'Medium',
+      es: 'Medio'
+    },
+    'Difícil': {
+      pt: 'Difícil',
+      en: 'Hard',
+      es: 'Difícil'
+    }
+  };
+
+  const translateDifficulty = (difficulty) => {
+    return difficultyMap[difficulty]?.[language] || difficulty;
+  };
+
+  return { translateDifficulty };
 };

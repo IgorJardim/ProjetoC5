@@ -6,31 +6,36 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { useNews } from '@/contexts/NewsContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation, useCategoryTranslation } from '@/data/translations';
 
 const NewsPage = () => {
   const { getPublishedNews } = useNews();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { translateCategory } = useCategoryTranslation(language);
   const publishedNews = getPublishedNews();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Todas');
+  const [selectedCategory, setSelectedCategory] = useState(t('allCategories'));
 
-  const categories = ['Todas', ...new Set(publishedNews.map(n => n.category))];
+  const categories = [t('allCategories'), ...new Set(publishedNews.map(n => n.category))];
 
   const filteredNews = publishedNews.filter(item => {
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          item.content.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'Todas' || item.category === selectedCategory;
+    const matchesCategory = selectedCategory === t('allCategories') || item.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const featuredNews = publishedNews[0];
-  const otherNews = filteredNews.slice(selectedCategory === 'Todas' && !searchQuery ? 1 : 0);
+  const otherNews = filteredNews.slice(selectedCategory === t('allCategories') && !searchQuery ? 1 : 0);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
       <main className="container mx-auto px-4 py-8">
-        <Breadcrumb items={[{ label: 'Notícias', href: null }]} />
+        <Breadcrumb items={[{ label: t('news'), href: null }]} />
 
         <div className="mb-12 text-center">
           <motion.div
@@ -39,7 +44,7 @@ const NewsPage = () => {
             className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full mb-4"
           >
             <Clock className="w-5 h-5" />
-            <span className="font-semibold">Últimas Notícias</span>
+            <span className="font-semibold">{t('latestNews')}</span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -47,7 +52,7 @@ const NewsPage = () => {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-4"
           >
-            Fique por Dentro
+            {t('stayInformed')}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -55,7 +60,7 @@ const NewsPage = () => {
             transition={{ delay: 0.2 }}
             className="text-gray-600 text-lg max-w-2xl mx-auto"
           >
-            Novidades, atualizações e dicas sobre o mundo da coloração
+            {t('newsSubtitle')}
           </motion.p>
         </div>
 
@@ -64,7 +69,7 @@ const NewsPage = () => {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Buscar notícias..."
+              placeholder={t('searchNews')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
@@ -81,13 +86,13 @@ const NewsPage = () => {
                     : 'bg-white text-gray-700 border border-gray-200 hover:border-purple-300'
                 }`}
               >
-                {category}
+                {category === t('allCategories') ? category : translateCategory(category)}
               </button>
             ))}
           </div>
         </div>
 
-        {featuredNews && selectedCategory === 'Todas' && !searchQuery && (
+        {featuredNews && selectedCategory === t('allCategories') && !searchQuery && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -103,7 +108,7 @@ const NewsPage = () => {
                   />
                   <div className="absolute top-4 left-4">
                     <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                      Destaque
+                      {t('featured')}
                     </span>
                   </div>
                 </div>
@@ -111,11 +116,13 @@ const NewsPage = () => {
                   <div className="flex items-center gap-4 mb-4 text-sm text-gray-500">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
-                      {new Date(featuredNews.date).toLocaleDateString('pt-BR')}
+                      {new Date(featuredNews.date).toLocaleDateString(
+                        language === 'pt' ? 'pt-BR' : language === 'es' ? 'es-ES' : 'en-US'
+                      )}
                     </div>
                     <div className="flex items-center gap-1">
                       <Tag className="w-4 h-4" />
-                      {featuredNews.category}
+                      {translateCategory(featuredNews.category)}
                     </div>
                   </div>
                   <h2 className="text-3xl font-bold text-gray-800 mb-4">
@@ -132,7 +139,7 @@ const NewsPage = () => {
                     to={`/noticias/${featuredNews.id}`}
                     className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all w-fit"
                   >
-                    Ler mais
+                    {t('readMore')}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -158,7 +165,7 @@ const NewsPage = () => {
                 />
                 <div className="absolute top-3 right-3">
                   <span className="bg-white/90 backdrop-blur-sm text-purple-600 px-3 py-1 rounded-full text-xs font-semibold">
-                    {item.category}
+                    {translateCategory(item.category)}
                   </span>
                 </div>
               </div>
@@ -166,7 +173,9 @@ const NewsPage = () => {
                 <div className="flex items-center gap-4 mb-3 text-sm text-gray-500">
                   <div className="flex items-center gap-1">
                     <Calendar className="w-4 h-4" />
-                    {new Date(item.date).toLocaleDateString('pt-BR')}
+                    {new Date(item.date).toLocaleDateString(
+                      language === 'pt' ? 'pt-BR' : language === 'es' ? 'es-ES' : 'en-US'
+                    )}
                   </div>
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors line-clamp-2">
@@ -184,7 +193,7 @@ const NewsPage = () => {
                     to={`/noticias/${item.id}`}
                     className="text-purple-600 hover:text-pink-600 font-semibold text-sm flex items-center gap-1"
                   >
-                    Ler mais
+                    {t('readMore')}
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -195,7 +204,7 @@ const NewsPage = () => {
 
         {filteredNews.length === 0 && (
           <div className="text-center py-20">
-            <p className="text-gray-500 text-lg">Nenhuma notícia encontrada.</p>
+            <p className="text-gray-500 text-lg">{t('noNewsFound')}</p>
           </div>
         )}
       </main>

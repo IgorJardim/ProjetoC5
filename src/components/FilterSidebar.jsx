@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { categories } from '@/data/coloringData';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useTranslation } from '@/data/translations';
+import { useTranslation, useCategoryTranslation } from '@/data/translations';
 
 const FilterSection = ({ title, isOpen, onToggle, children }) => {
   return (
@@ -38,6 +38,7 @@ const FilterSection = ({ title, isOpen, onToggle, children }) => {
 const FilterSidebar = ({ filters, onFilterChange }) => {
   const { language } = useLanguage();
   const { t } = useTranslation(language);
+  const { translateCategory } = useCategoryTranslation(language);
   
   const [openSections, setOpenSections] = useState({
     categories: true,
@@ -60,23 +61,16 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
     onFilterChange(type, newValues);
   };
 
-  // Traduzir dificuldades
-  const difficulties = {
-    pt: ['Fácil', 'Médio', 'Difícil'],
-    en: ['Easy', 'Medium', 'Hard'],
-    es: ['Fácil', 'Medio', 'Difícil']
+  // Dificuldades traduzidas - mapeia valores do banco para exibição
+  const difficultyDisplay = {
+    pt: { 'Fácil': 'Fácil', 'Médio': 'Médio', 'Difícil': 'Difícil' },
+    en: { 'Fácil': 'Easy', 'Médio': 'Medium', 'Difícil': 'Hard' },
+    es: { 'Fácil': 'Fácil', 'Médio': 'Medio', 'Difícil': 'Difícil' }
   };
 
-  const difficultyMapping = {
-    'Fácil': { en: 'Easy', es: 'Fácil' },
-    'Easy': { pt: 'Fácil', es: 'Fácil' },
-    'Médio': { en: 'Medium', es: 'Medio' },
-    'Medium': { pt: 'Médio', es: 'Medio' },
-    'Difícil': { en: 'Hard', es: 'Difícil' },
-    'Hard': { pt: 'Difícil', es: 'Difícil' }
-  };
-
-  const currentDifficulties = difficulties[language] || difficulties.pt;
+  // Valores do banco de dados (sempre em português)
+  const difficultyValues = ['Fácil', 'Médio', 'Difícil'];
+  const currentDifficultyDisplay = difficultyDisplay[language] || difficultyDisplay.pt;
 
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-gray-100 p-5">
@@ -99,7 +93,9 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
               >
                 {filters.categories.includes(cat.name) && <Check className="w-3 h-3 text-white" />}
               </div>
-              <span className="text-sm font-medium text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('categories', cat.name)}>{cat.name}</span>
+              <span className="text-sm font-medium text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('categories', cat.name)}>
+                {translateCategory(cat.name)}
+              </span>
             </div>
             
             <div className="ml-6 space-y-1.5 border-l-2 border-gray-100 pl-3">
@@ -111,7 +107,9 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
                   >
                     {filters.subcategories.includes(sub) && <Check className="w-2.5 h-2.5 text-white" />}
                   </div>
-                  <span className="text-xs text-gray-600 cursor-pointer hover:text-pink-600" onClick={() => handleCheckboxChange('subcategories', sub)}>{sub}</span>
+                  <span className="text-xs text-gray-600 cursor-pointer hover:text-pink-600" onClick={() => handleCheckboxChange('subcategories', sub)}>
+                    {translateCategory(sub)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -125,7 +123,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
         isOpen={openSections.difficulty}
         onToggle={() => toggleSection('difficulty')}
       >
-        {currentDifficulties.map(level => (
+        {difficultyValues.map(level => (
           <div key={level} className="flex items-center gap-2">
             <div 
               className={`w-4 h-4 rounded border flex items-center justify-center cursor-pointer transition-colors ${filters.difficulty.includes(level) ? 'bg-purple-600 border-purple-600' : 'border-gray-300 bg-white hover:border-purple-400'}`}
@@ -133,7 +131,9 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
             >
               {filters.difficulty.includes(level) && <Check className="w-3 h-3 text-white" />}
             </div>
-            <span className="text-sm text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('difficulty', level)}>{level}</span>
+            <span className="text-sm text-gray-700 cursor-pointer" onClick={() => handleCheckboxChange('difficulty', level)}>
+              {currentDifficultyDisplay[level]}
+            </span>
           </div>
         ))}
       </FilterSection>
@@ -166,7 +166,7 @@ const FilterSidebar = ({ filters, onFilterChange }) => {
             className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold shadow-md hover:shadow-lg transition-all"
           >
             <HeartHandshake className="w-4 h-4 mr-2" />
-            {language === 'en' ? 'Support the project $$' : language === 'es' ? 'Apoya el proyecto $$' : 'Apoie o projeto $$'}
+            {t('supportProject')}
           </Button>
         </Link>
       </div>

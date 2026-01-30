@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Printer } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation, useCategoryTranslation, useDifficultyTranslation } from '@/data/translations';
 
 const ColorCard = ({ item }) => {
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { translateCategory } = useCategoryTranslation(language);
+  const { translateDifficulty } = useDifficultyTranslation(language);
   const { id, title, category, subcategory, difficulty, ageGroup, likes, image } = item;
   const [localLikes, setLocalLikes] = useState(likes || 0);
   const [hasLiked, setHasLiked] = useState(false);
@@ -50,20 +55,20 @@ const ColorCard = ({ item }) => {
         }
         
         toast({
-          title: hasLiked ? "Like removido" : "❤️ Curtiu!",
-          description: hasLiked ? "Você removeu seu like" : "Você curtiu este desenho"
+          title: hasLiked ? t('likeRemoved') : `❤️ ${t('likeAdded')}`,
+          description: hasLiked ? t('likeRemovedDesc') : t('likeAddedDesc')
         });
       }
     } catch (error) {
       console.error('Erro ao curtir:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível curtir. Abra o desenho para curtir."
+        title: t('error'),
+        description: t('errorLikeOpen')
       });
     }
   };
 
-  // IMPRESSÃO CORRIGIDA - Navega para página de detalhes
+  // IMPRESSÃO CORRIGIDA
   const handleQuickPrint = async (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -181,10 +186,10 @@ const ColorCard = ({ item }) => {
                 />
               </div>
               <div class="watermark">
-                © FreeColoringBookIds.com - Desenho para Colorir Gratuito
+                © FreeColoringBookIds.com - ${t('freeColoringDrawing')}
               </div>
               <div class="info">
-                ${category} • ${subcategory} • ${difficulty} • ${ageGroup} anos
+                ${translateCategory(category)} • ${translateCategory(subcategory)} • ${translateDifficulty(difficulty)} • ${ageGroup} ${t('years')}
               </div>
             </div>
           </body>
@@ -193,15 +198,15 @@ const ColorCard = ({ item }) => {
       printWindow.document.close();
 
       toast({
-        title: "🖨️ Preparando impressão",
-        description: "Janela de impressão será aberta"
+        title: `🖨️ ${t('printPreparing')}`,
+        description: t('printPreparingShort')
       });
 
     } catch (error) {
       console.error('Erro ao imprimir:', error);
       toast({
-        title: "❌ Erro",
-        description: "Não foi possível imprimir"
+        title: `❌ ${t('error')}`,
+        description: t('errorPrintShort')
       });
     }
   };
@@ -209,6 +214,12 @@ const ColorCard = ({ item }) => {
   const difficultyColor = {
     'Fácil': 'bg-green-100 text-green-700',
     'Médio': 'bg-yellow-100 text-yellow-700',
+    'Difícil': 'bg-red-100 text-red-700',
+    'Easy': 'bg-green-100 text-green-700',
+    'Medium': 'bg-yellow-100 text-yellow-700',
+    'Hard': 'bg-red-100 text-red-700',
+    'Fácil': 'bg-green-100 text-green-700',
+    'Medio': 'bg-yellow-100 text-yellow-700',
     'Difícil': 'bg-red-100 text-red-700'
   };
 
@@ -239,10 +250,10 @@ const ColorCard = ({ item }) => {
           {/* Badges */}
           <div className="absolute top-3 right-3 flex flex-col gap-1.5">
             <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${difficultyColor[difficulty] || 'bg-gray-100 text-gray-700'}`}>
-              {difficulty}
+              {translateDifficulty(difficulty)}
             </span>
             <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-white/90 text-purple-600 shadow-sm backdrop-blur-sm">
-              {ageGroup} anos
+              {ageGroup} {t('years')}
             </span>
           </div>
 
@@ -256,7 +267,7 @@ const ColorCard = ({ item }) => {
                   ? 'bg-pink-500 text-white hover:bg-pink-600' 
                   : 'bg-white text-pink-500 hover:bg-pink-50'
               }`}
-              title={hasLiked ? "Remover curtida" : "Curtir"}
+              title={hasLiked ? t('removeLike') : t('like')}
             >
               <Heart className={`w-5 h-5 ${hasLiked ? 'fill-white' : ''}`} />
             </Button>
@@ -264,7 +275,7 @@ const ColorCard = ({ item }) => {
               size="icon"
               onClick={handleQuickPrint}
               className="rounded-full bg-blue-600 text-white hover:bg-blue-700 border-none shadow-lg transform hover:scale-110 transition-all"
-              title="Imprimir rapidamente"
+              title={t('quickPrint')}
             >
               <Printer className="w-5 h-5" />
             </Button>
@@ -277,14 +288,14 @@ const ColorCard = ({ item }) => {
               <h3 className="font-bold text-gray-800 line-clamp-1 group-hover:text-purple-600 transition-colors">
                 {title}
               </h3>
-              <p className="text-xs text-gray-500 line-clamp-1">{category} • {subcategory}</p>
+              <p className="text-xs text-gray-500 line-clamp-1">{translateCategory(category)} • {translateCategory(subcategory)}</p>
             </div>
           </div>
 
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
             <div className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
               <Printer className="w-3.5 h-3.5" />
-              <span>Imprimir</span>
+              <span>{t('print')}</span>
             </div>
             <div className="flex items-center gap-1 text-xs font-medium text-pink-500">
               <Heart className={`w-3.5 h-3.5 ${hasLiked ? 'fill-pink-500' : ''}`} />

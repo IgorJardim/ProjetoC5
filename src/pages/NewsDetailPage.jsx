@@ -7,11 +7,16 @@ import Footer from '@/components/Footer';
 import Breadcrumb from '@/components/Breadcrumb';
 import { useNews } from '@/contexts/NewsContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useTranslation, useCategoryTranslation } from '@/data/translations';
 
 const NewsDetailPage = () => {
   const { id } = useParams();
   const { getNewsById } = useNews();
   const { toast } = useToast();
+  const { language } = useLanguage();
+  const { t } = useTranslation(language);
+  const { translateCategory } = useCategoryTranslation(language);
   const newsItem = getNewsById(id);
 
   if (!newsItem) {
@@ -19,9 +24,9 @@ const NewsDetailPage = () => {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <div className="container mx-auto px-4 py-20 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Notícia não encontrada</h1>
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">{t('newsNotFound')}</h1>
           <Link to="/noticias" className="text-purple-600 hover:text-pink-600">
-            Voltar para notícias
+            {t('backToNews')}
           </Link>
         </div>
         <Footer />
@@ -39,8 +44,8 @@ const NewsDetailPage = () => {
     } else {
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: "Link copiado!",
-        description: "O link da notícia foi copiado para a área de transferência."
+        title: t('newsLinkCopied'),
+        description: t('newsLinkCopiedDesc')
       });
     }
   };
@@ -51,7 +56,7 @@ const NewsDetailPage = () => {
       
       <main className="container mx-auto px-4 py-8">
         <Breadcrumb items={[
-          { label: 'Notícias', href: '/noticias' },
+          { label: t('news'), href: '/noticias' },
           { label: newsItem.title.substring(0, 30) + '...', href: null }
         ]} />
 
@@ -61,7 +66,7 @@ const NewsDetailPage = () => {
             className="inline-flex items-center gap-2 text-gray-600 hover:text-purple-600 mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Voltar para notícias
+            {t('backToNews')}
           </Link>
 
           <motion.div
@@ -71,7 +76,7 @@ const NewsDetailPage = () => {
           >
             <div className="flex items-center gap-3 mb-4">
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
-                {newsItem.category}
+                {translateCategory(newsItem.category)}
               </span>
             </div>
             
@@ -86,18 +91,21 @@ const NewsDetailPage = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
-                <span>{new Date(newsItem.date).toLocaleDateString('pt-BR', { 
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric'
-                })}</span>
+                <span>{new Date(newsItem.date).toLocaleDateString(
+                  language === 'pt' ? 'pt-BR' : language === 'es' ? 'es-ES' : 'en-US',
+                  { 
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  }
+                )}</span>
               </div>
               <button
                 onClick={handleShare}
                 className="flex items-center gap-2 hover:text-purple-600 transition-colors"
               >
                 <Share2 className="w-5 h-5" />
-                Compartilhar
+                {t('share')}
               </button>
             </div>
           </motion.div>
@@ -134,14 +142,14 @@ const NewsDetailPage = () => {
             transition={{ delay: 0.4 }}
             className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-white text-center"
           >
-            <h3 className="text-2xl font-bold mb-4">Gostou desta notícia?</h3>
-            <p className="mb-6">Compartilhe com seus amigos!</p>
+            <h3 className="text-2xl font-bold mb-4">{t('likedThisNews')}</h3>
+            <p className="mb-6">{t('shareWithFriends')}</p>
             <button
               onClick={handleShare}
               className="bg-white text-purple-600 px-8 py-3 rounded-xl font-semibold hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
             >
               <Share2 className="w-5 h-5" />
-              Compartilhar
+              {t('share')}
             </button>
           </motion.div>
         </article>
