@@ -5,35 +5,24 @@ const LanguageContext = createContext();
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
-    throw new Error('useLanguage must be used within LanguageProvider');
+    throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
 };
 
 export const LanguageProvider = ({ children }) => {
-  // Detectar idioma do navegador ou usar localStorage
-  const getInitialLanguage = () => {
-    const saved = localStorage.getItem('language');
-    if (saved) return saved;
-    
-    const browserLang = navigator.language.split('-')[0];
-    if (['pt', 'en', 'es'].includes(browserLang)) {
-      return browserLang;
-    }
-    return 'pt'; // Padrão
-  };
+  const [language, setLanguage] = useState(() => {
+    const savedLanguage = localStorage.getItem('language');
+    return savedLanguage || 'en';
+  });
 
-  const [language, setLanguage] = useState(getInitialLanguage);
-
+  // Salvar no localStorage quando mudar
   useEffect(() => {
     localStorage.setItem('language', language);
-    document.documentElement.lang = language;
   }, [language]);
 
-  const changeLanguage = (newLang) => {
-    if (['pt', 'en', 'es'].includes(newLang)) {
-      setLanguage(newLang);
-    }
+  const changeLanguage = (newLanguage) => {
+    setLanguage(newLanguage);
   };
 
   return (

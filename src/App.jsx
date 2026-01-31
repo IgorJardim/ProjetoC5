@@ -12,12 +12,15 @@ import { Toaster } from '@/components/ui/toaster';
 import { NewsProvider } from '@/contexts/NewsContext';
 import { DrawingsProvider } from '@/contexts/DrawingsContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { TestimonialsProvider } from '@/contexts/TestimonialsContext';
 
 function App() {
   return (
+    <TestimonialsProvider>
     <LanguageProvider>
       <NewsProvider>
         <DrawingsProvider>
+          
           <Router>
             <Helmet>
               <title>FreeColoringBookIds - Free Coloring Pages for Kids | freecoloringbookids.com</title>
@@ -41,10 +44,10 @@ function App() {
               <Toaster />
             </div>
           </Router>
-        </DrawingsProvider>
+          </DrawingsProvider>
       </NewsProvider>
     </LanguageProvider>
+    </TestimonialsProvider>
   );
 }
-
 export default App;

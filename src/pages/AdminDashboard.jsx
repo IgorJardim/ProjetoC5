@@ -2,14 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   LayoutDashboard, FileText, Users, Download, TrendingUp, Eye, Plus, Edit2, Trash2, Save, X, Calendar,
-  BarChart3, Activity, Upload, Image as ImageIcon, CheckCircle, Printer, Heart
+  BarChart3, Activity, Upload, Image as ImageIcon, CheckCircle, Printer, Heart, Star
 } from 'lucide-react';
 import { useNews } from '@/contexts/NewsContext';
 import { useDrawings } from '@/contexts/DrawingsContext';
+import { useTestimonials } from '@/contexts/TestimonialsContext';
+import { MessageSquare } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { news, addNews, updateNews, deleteNews } = useNews();
   const { drawings, addDrawing, updateDrawing, deleteDrawing } = useDrawings();
+  const { testimonials, addTestimonial, updateTestimonial, deleteTestimonial } = useTestimonials();
   
   const [realStats, setRealStats] = useState({
     total_drawings: 0,
@@ -86,6 +89,17 @@ const AdminDashboard = () => {
   const [isDraggingDrawing, setIsDraggingDrawing] = useState(false);
   const [drawingImagePreview, setDrawingImagePreview] = useState('');
   const [drawingSortOption, setDrawingSortOption] = useState('recent');
+
+  // ========== ESTADO DE DEPOIMENTOS ========== //
+   const [isCreatingTestimonial, setIsCreatingTestimonial] = useState(false);
+    const [editingTestimonial, setEditingTestimonial] = useState(null);
+    const [testimonialForm, setTestimonialForm] = useState({
+      name: '',
+      role: '',
+      text: '',
+      avatar: '',
+      rating: 5
+    });
 
   const stats = [
     { 
@@ -315,10 +329,59 @@ const AdminDashboard = () => {
     setDrawingImagePreview('');
   };
 
+  // ========== FUNÇÕES DE DEPOIMENTOS ==========
+const handleCreateTestimonial = () => {
+  if (!testimonialForm.name || !testimonialForm.role || !testimonialForm.text) {
+    alert('Por favor, preencha todos os campos obrigatórios');
+    return;
+  }
+  
+  addTestimonial(testimonialForm);
+  setTestimonialForm({
+    name: '',
+    role: '',
+    text: '',
+    avatar: '',
+    rating: 5
+  });
+  setIsCreatingTestimonial(false);
+  alert('Depoimento criado com sucesso!');
+};
+
+const handleUpdateTestimonial = () => {
+  if (!editingTestimonial.name || !editingTestimonial.role || !editingTestimonial.text) {
+    alert('Por favor, preencha todos os campos obrigatórios');
+    return;
+  }
+  
+  updateTestimonial(editingTestimonial.id, editingTestimonial);
+  setEditingTestimonial(null);
+  alert('Depoimento atualizado com sucesso!');
+};
+
+const handleDeleteTestimonial = (id) => {
+  if (window.confirm('Tem certeza que deseja excluir este depoimento?')) {
+    deleteTestimonial(id);
+    alert('Depoimento excluído com sucesso!');
+  }
+};
+
+const handleCancelTestimonial = () => {
+  setIsCreatingTestimonial(false);
+  setEditingTestimonial(null);
+  setTestimonialForm({
+    name: '',
+    role: '',
+    text: '',
+    avatar: '',
+    rating: 5
+  });
+};
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'news', label: 'Notícias', icon: FileText },
-    { id: 'drawings', label: 'Desenhos', icon: ImageIcon }
+    { id: 'drawings', label: 'Desenhos', icon: ImageIcon },
+    { id: 'testimonials', label: 'Depoimentos', icon: MessageSquare }
   ];
 
   return (
@@ -1068,6 +1131,210 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
+        {activeTab === 'testimonials' && (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">Gerenciar Depoimentos</h2>
+            <p className="text-gray-600 mt-1">Total: {testimonials.length} depoimentos</p>
+          </div>
+          <button
+            onClick={() => setIsCreatingTestimonial(true)}
+            className="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all"
+          >
+            <Plus className="w-5 h-5" />
+            Novo Depoimento
+          </button>
+        </div>
+
+        {/* Create/Edit Testimonial Form */}
+        {(isCreatingTestimonial || editingTestimonial) && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-lg p-6 border border-gray-100"
+          >
+            <h3 className="text-xl font-bold text-gray-800 mb-4">
+              {editingTestimonial ? 'Editar Depoimento' : 'Novo Depoimento'}
+            </h3>
+            <div className="space-y-4">
+              {/* Nome */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nome *
+                </label>
+                <input
+                  type="text"
+                  value={editingTestimonial ? editingTestimonial.name : testimonialForm.name}
+                  onChange={(e) => editingTestimonial 
+                    ? setEditingTestimonial({...editingTestimonial, name: e.target.value})
+                    : setTestimonialForm({...testimonialForm, name: e.target.value})
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Ex: Maria Silva"
+                />
+              </div>
+
+              {/* Função/Relação */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Função/Relação *
+                </label>
+                <input
+                  type="text"
+                  value={editingTestimonial ? editingTestimonial.role : testimonialForm.role}
+                  onChange={(e) => editingTestimonial 
+                    ? setEditingTestimonial({...editingTestimonial, role: e.target.value})
+                    : setTestimonialForm({...testimonialForm, role: e.target.value})
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Ex: Mãe de 2 crianças"
+                />
+              </div>
+
+              {/* Depoimento */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Depoimento *
+                </label>
+                <textarea
+                  value={editingTestimonial ? editingTestimonial.text : testimonialForm.text}
+                  onChange={(e) => editingTestimonial
+                    ? setEditingTestimonial({...editingTestimonial, text: e.target.value})
+                    : setTestimonialForm({...testimonialForm, text: e.target.value})
+                  }
+                  rows={4}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="Digite o depoimento..."
+                />
+              </div>
+
+              {/* Avatar URL */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  URL do Avatar (Opcional)
+                </label>
+                <input
+                  type="text"
+                  value={editingTestimonial ? editingTestimonial.avatar : testimonialForm.avatar}
+                  onChange={(e) => editingTestimonial 
+                    ? setEditingTestimonial({...editingTestimonial, avatar: e.target.value})
+                    : setTestimonialForm({...testimonialForm, avatar: e.target.value})
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  placeholder="https://exemplo.com/avatar.jpg"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Se deixar vazio, será gerado automaticamente
+                </p>
+              </div>
+
+              {/* Avaliação */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Avaliação (1-5 estrelas)
+                </label>
+                <select
+                  value={editingTestimonial ? editingTestimonial.rating : testimonialForm.rating}
+                  onChange={(e) => editingTestimonial
+                    ? setEditingTestimonial({...editingTestimonial, rating: parseInt(e.target.value)})
+                    : setTestimonialForm({...testimonialForm, rating: parseInt(e.target.value)})
+                  }
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                >
+                  <option value={5}>★★★★★ (5 estrelas)</option>
+                  <option value={4}>★★★★☆ (4 estrelas)</option>
+                  <option value={3}>★★★☆☆ (3 estrelas)</option>
+                  <option value={2}>★★☆☆☆ (2 estrelas)</option>
+                  <option value={1}>★☆☆☆☆ (1 estrela)</option>
+                </select>
+              </div>
+
+              {/* Botões */}
+              <div className="flex gap-3">
+                <button
+                  onClick={editingTestimonial ? handleUpdateTestimonial : handleCreateTestimonial}
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-lg hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                >
+                  <Save className="w-5 h-5" />
+                  {editingTestimonial ? 'Atualizar' : 'Criar'}
+                </button>
+                <button
+                  onClick={handleCancelTestimonial}
+                  className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all flex items-center gap-2"
+                >
+                  <X className="w-5 h-5" />
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Lista de Depoimentos */}
+        <div className="grid gap-4">
+          {testimonials.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
+              <MessageSquare className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <p className="text-gray-500">Nenhum depoimento cadastrado ainda.</p>
+            </div>
+          ) : (
+            testimonials.map((testimonial) => (
+              <motion.div
+                key={testimonial.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-all"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex gap-4 flex-1">
+                    <img
+                      src={testimonial.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${testimonial.name}`}
+                      alt={testimonial.name}
+                      className="w-16 h-16 rounded-full border-4 border-purple-100"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="font-bold text-gray-800">{testimonial.name}</h3>
+                        <div className="flex gap-0.5">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < testimonial.rating
+                                  ? 'text-yellow-400 fill-yellow-400'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2">{testimonial.role}</p>
+                      <p className="text-gray-700 italic">"{testimonial.text}"</p>
+                      <p className="text-xs text-gray-500 mt-2">{new Date(testimonial.date).toLocaleDateString('pt-BR')}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setEditingTestimonial(testimonial)}
+                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                    >
+                      <Edit2 className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={() => handleDeleteTestimonial(testimonial.id)}
+                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))
+          )}
+        </div>
+      </div>
+    )}
         </main>
       </div>
     </div>

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Coffee, Pizza, Sparkles, Crown, Users, TrendingUp, Globe, CreditCard, DollarSign, Check } from 'lucide-react';
+// Adicionei Award e Star na lista de imports
+import { Heart, Coffee, Pizza, Sparkles, Crown, Users, TrendingUp, Globe, CreditCard, DollarSign, Check, Award, Star } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTranslation } from '@/data/translations';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 
 const SupportPage = () => {
   const { toast } = useToast();
@@ -16,69 +18,70 @@ const SupportPage = () => {
 
   const donationPlans = [
     {
-      id: 'coffee',
+      id: 'basic',
       icon: Coffee,
-      name: t('coffee'),
-      price: 5,
-      priceUSD: 1,
-      description: t('coffeeDesc'),
-      color: 'from-amber-500 to-orange-600',
+      name: t('basicSupport'),
+      priceUSD: 3,
+      price: 15,
+      description: t('basicSupportDesc'),
+      color: 'from-blue-500 to-blue-600',
       benefits: [
-        language === 'en' ? 'Basic support' : language === 'es' ? 'Apoyo básico' : 'Apoio básico',
-        language === 'en' ? 'Our thanks' : language === 'es' ? 'Nuestro agradecimiento' : 'Nosso agradecimento'
+        t('basicSupportBenefit1'),
+        t('basicSupportBenefit2'),
+        t('basicSupportBenefit3')
       ]
     },
     {
-      id: 'pizza',
+      id: 'creative',
       icon: Pizza,
-      name: t('pizza'),
-      price: 20,
-      priceUSD: 4,
-      description: t('pizzaDesc'),
-      color: 'from-red-500 to-pink-600',
+      name: t('creativeSupport'),
+      price: 50,    // R$
+      priceUSD: 10, // $10 (Novo valor)
+      description: t('creativeSupportDesc'),
+      color: 'from-purple-500 to-purple-600',
       benefits: [
-        language === 'en' ? 'Significant support' : language === 'es' ? 'Apoyo significativo' : 'Apoio significativo',
-        language === 'en' ? 'Helps maintain the site' : language === 'es' ? 'Ayuda a mantener el sitio' : 'Ajuda a manter o site',
-        language === 'en' ? 'Special recognition' : language === 'es' ? 'Reconocimiento especial' : 'Reconhecimento especial'
+        t('creativeSupportBenefit1'),
+        t('creativeSupportBenefit2'),
+        t('creativeSupportBenefit3')
       ],
       popular: true
     },
     {
-      id: 'supporter',
-      icon: Sparkles,
-      name: t('supporter'),
-      price: 50,
-      priceUSD: 10,
-      description: t('supporterDesc'),
-      color: 'from-purple-500 to-pink-600',
+      id: 'loyal',
+      icon: Award,
+      name: t('loyalSupporter'),
+      price: 125,   // R$
+      priceUSD: 25, // $25 (Novo valor)
+      description: t('loyalSupporterDesc'),
+      color: 'from-pink-500 to-pink-600',
       benefits: [
-        language === 'en' ? 'Monthly support' : language === 'es' ? 'Apoyo mensual' : 'Apoio mensal',
-        language === 'en' ? 'Early access' : language === 'es' ? 'Acceso anticipado' : 'Acesso antecipado',
-        language === 'en' ? 'Supporter badge' : language === 'es' ? 'Insignia de partidario' : 'Badge de apoiador',
-        language === 'en' ? 'Priority support' : language === 'es' ? 'Soporte prioritario' : 'Prioridade no suporte'
+        t('loyalSupporterBenefit1'),
+        t('loyalSupporterBenefit2'),
+        t('loyalSupporterBenefit3')
       ]
     },
     {
-      id: 'sponsor',
+      id: 'vip',
       icon: Crown,
-      name: t('sponsor'),
-      price: 100,
-      priceUSD: 20,
-      description: t('sponsorDesc'),
-      color: 'from-yellow-500 to-amber-600',
+      name: t('vipSponsor'),
+      price: 250,   // R$
+      priceUSD: 50, // $50 (Novo valor)
+      description: t('vipSponsorDesc'),
+      color: 'from-yellow-500 to-orange-600',
       benefits: [
-        language === 'en' ? 'Logo on site' : language === 'es' ? 'Logo en el sitio' : 'Logo no site',
-        language === 'en' ? 'Public recognition' : language === 'es' ? 'Reconocimiento público' : 'Reconhecimento público',
-        language === 'en' ? 'Impact reports' : language === 'es' ? 'Informes de impacto' : 'Relatórios de impacto',
-        language === 'en' ? 'Feature influence' : language === 'es' ? 'Influencia en funciones' : 'Influência em features'
+        t('vipSponsorBenefit1'),
+        t('vipSponsorBenefit2'),
+        t('vipSponsorBenefit3'),
+        t('vipSponsorBenefit4'),
+        t('vipSponsorBenefit5')
       ]
     }
   ];
 
   const stats = [
-    { label: t('freeDrawings'), value: '1000+', icon: Sparkles },
-    { label: t('childrenHelped'), value: '500+', icon: Users },
-    { label: t('downloadsMonth'), value: '10K+', icon: TrendingUp },
+    { label: t('childrenHelped'), value: '50,000+', icon: Users },
+    { label: t('drawingsDownloaded'), value: '200,000+', icon: TrendingUp },
+    { label: t('averageRating'), value: '4.9/5', icon: Star },
     { label: t('countriesReached'), value: '25+', icon: Globe }
   ];
 
@@ -245,10 +248,10 @@ const SupportPage = () => {
 
                       <div className="mb-6">
                         <div className="flex items-baseline gap-2 mb-1">
-                          <span className="text-4xl font-bold text-gray-800">R$ {plan.price}</span>
+                          <span className="text-4xl font-bold text-gray-800">$ {plan.priceUSD}</span>
                         </div>
                         <div className="text-sm text-gray-500">
-                          {t('or')} USD ${plan.priceUSD}
+                          {t('or')} BRL R${plan.price}
                         </div>
                       </div>
 
@@ -322,6 +325,15 @@ const SupportPage = () => {
             </div>
           </div>
         </section>
+        
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+            className="mb-16"
+          >
+            <TestimonialsCarousel />
+          </motion.div>
 
         {/* Payment Methods */}
         <section className="py-20 bg-gradient-to-br from-purple-50 to-pink-50">
